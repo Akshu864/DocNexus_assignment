@@ -119,7 +119,7 @@ const deleteBlog = async (req, res) => {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ msg: 'Server error' });
+      res.status(500).send({ msg: 'Server error' });
     }
   };
   
