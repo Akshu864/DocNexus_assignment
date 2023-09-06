@@ -55,7 +55,7 @@ const authorCreate = async function (req, res) {
    
    const createNew=await userModel.create(data)
 
-   return res.status(201).json({ msg: 'User registered successfully',data:data });
+   return res.status(201).send({ msg: 'User registered successfully',data:data });
 
   } catch (error) {
     console.log(error);
@@ -85,19 +85,19 @@ const getUser=async function(req,res){
 
 
 
-
+//update
 
 
 const updateUser = async function (req, res) {
     try {
-      const { userId } = req.params; // Assuming you have a userId parameter in the URL
-      const updateData = req.body; // The data to update
+      const { userId } = req.params; 
+      const updateData = req.body; 
   
   
       const user = await userModel.findById(userId);
   
       if (!user) {
-        return res.status(404).json({ msg: 'User not found' });
+        return res.status(404).send({ msg: 'User not found' });
       }
   
       user.fname = updateData.fname || user.fname;
@@ -111,7 +111,7 @@ const updateUser = async function (req, res) {
         const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
   
         if (!passwordPattern.test(updateData.password)) {
-          return res.status(400).json({
+          return res.status(400).send({
             msg: 'Password must be at least 6 characters long and start with an uppercase letter',
           });
         }
@@ -124,7 +124,7 @@ const updateUser = async function (req, res) {
       await user.save();
   
      
-      return res.status(200).json({ msg: 'User updated successfully', data: user });
+      return res.status(200).send({ msg: 'User updated successfully', data: user });
     } catch (error) {
       console.error(error);
       res.status(500).json({ msg: 'Server error' });
@@ -143,11 +143,11 @@ const deleteUser = async function (req, res) {
       const result = await userModel.deleteOne({ _id: userId });
   
       if (result.deletedCount === 0) {
-        return res.status(404).json({ msg: 'User not found' });
+        return res.status(404).send({ msg: 'User not found' });
       }
   
  
-      return res.status(200).json({ msg: 'User deleted successfully' });
+      return res.status(200).send({ msg: 'User deleted successfully' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ msg: 'Server error' });
@@ -165,14 +165,14 @@ const deleteUser = async function (req, res) {
       const user = await userModel.findOne({ email: email });
   
       if (!user) {
-        return res.status(404).json({ msg: 'User not found' });
+        return res.status(404).send({ msg: 'User not found' });
       }
   
    
       const passwordMatch = await bcrypt.compare(password, user.password);
   
       if (!passwordMatch) {
-        return res.status(401).json({ msg: 'Invalid password' });
+        return res.status(401).send({ msg: 'Invalid password' });
       }
   
       const token = jwt.sign(
@@ -185,10 +185,10 @@ const deleteUser = async function (req, res) {
       );
   
    
-      return res.status(200).json({ msg: 'Login successful', token: token, data: user });
+      return res.status(200).send({ msg: 'Login successful', token: token, data: user });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ msg: 'Server error' });
+      res.status(500).send({ msg: 'Server error' });
     }
   };
   

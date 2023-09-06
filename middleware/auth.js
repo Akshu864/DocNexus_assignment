@@ -7,7 +7,7 @@ const authorize = (req, res, next) => {
 
 
   if (!token) {
-    return res.status(401).json({ msg: 'Authorization token missing' });
+    return res.status(401).send({ msg: 'Authorization token missing' });
   }
 
   try {
@@ -20,7 +20,7 @@ const authorize = (req, res, next) => {
 
   } catch (error) {
  
-    res.status(401).json({ msg: 'Token verification failed' });
+    res.status(401).send({ msg: 'Token verification failed' });
   }
 };
 

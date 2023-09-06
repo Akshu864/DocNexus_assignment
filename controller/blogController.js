@@ -50,13 +50,13 @@ const getAllBlogs = async (req, res) => {
       const blogs = await blogModel.find();
   
       if (!blogs || blogs.length === 0) {
-        return res.status(404).json({ msg: 'No blogs found' });
+        return res.status(404).send({ msg: 'No blogs found' });
       }
   
-      return res.status(200).json({ msg: 'Blogs retrieved successfully', data: blogs });
+      return res.status(200).send({ msg: 'Blogs retrieved successfully', data: blogs });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ msg: 'Server error' });
+      res.status(500).send({ msg: 'Server error' });
     }
   };
 
@@ -72,11 +72,11 @@ const updateBlog = async (req, res) => {
     const blog = await blogModel.findById(blogId);
 
     if (!blog) {
-      return res.status(404).json({ msg: 'Blog not found' });
+      return res.status(404).send({ msg: 'Blog not found' });
     }
 
     if (req.user.userId !== blog.authorId.toString()) {
-      return res.status(403).json({ msg: 'Unauthorized to update this blog' });
+      return res.status(403).send({ msg: 'Unauthorized to update this blog' });
     }
 
     blog.title = title || blog.title;
@@ -85,10 +85,10 @@ const updateBlog = async (req, res) => {
   
     await blog.save();
 
-    return res.status(200).json({ msg: 'Blog updated successfully', data: blog });
+    return res.status(200).send({ msg: 'Blog updated successfully', data: blog });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).send({ msg: 'Server error' });
   }
 };
 
@@ -103,19 +103,19 @@ const deleteBlog = async (req, res) => {
       const blog = await blogModel.findById(blogId);
   
       if (!blog) {
-        return res.status(404).json({ msg: 'Blog not found' });
+        return res.status(404).send({ msg: 'Blog not found' });
       }
   
       if (req.user.userId !== blog.authorId.toString()) {
-        return res.status(403).json({ msg: 'Unauthorized to delete this blog' });
+        return res.status(403).send({ msg: 'Unauthorized to delete this blog' });
       }
   
       const result = await blogModel.deleteOne({ _id: blogId });
   
       if (result.deletedCount === 1) {
-        return res.status(200).json({ msg: 'Blog deleted successfully' });
+        return res.status(200).send({ msg: 'Blog deleted successfully' });
       } else {
-        return res.status(500).json({ msg: 'Blog deletion failed' });
+        return res.status(500).send({ msg: 'Blog deletion failed' });
       }
     } catch (error) {
       console.error(error);
